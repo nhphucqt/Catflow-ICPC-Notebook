@@ -10,25 +10,25 @@
  */
 #pragma once
 
-struct FT {
-	vector<ll> s;
-	FT(int n) : s(n) {}
-	void update(int pos, ll dif) { // a[pos] += dif
-		for (; pos < sz(s); pos |= pos + 1) s[pos] += dif;
-	}
-	ll query(int pos) { // sum of values in [0, pos)
-		ll res = 0;
-		for (; pos > 0; pos &= pos - 1) res += s[pos-1];
-		return res;
-	}
-	int lower_bound(ll sum) {// min pos st sum of [0, pos] >= sum
-		// Returns n if no sum is >= sum, or -1 if empty sum is.
-		if (sum <= 0) return -1;
-		int pos = 0;
-		for (int pw = 1 << 25; pw; pw >>= 1) {
-			if (pos + pw <= sz(s) && s[pos + pw-1] < sum)
-				pos += pw, sum -= s[pos-1];
-		}
-		return pos;
-	}
+template <typename T>
+struct FenwickTree {
+    int n;
+    vector <T> tree;
+    FenwickTree(int n) : n(n), tree(n + 1) {}
+    void update(int i, T dif) {
+        for ( ; i <= n; i += i & (-i)) tree[i] += dif;
+    }
+    T query(int i) {
+        T res = 0;
+        for ( ; i > 0; i -= i & (-i)) res += tree[i];
+        return res;
+    }
+    int lower_bound(T sum) {
+        int pos = 0;
+        per (i, 31 - __builtin_clz(n), 0) {
+            if (pos + (1 << i) <= n && tree[pos + (1 << i)] < sum)
+                sum -= tree[pos += (1 << i)];
+        }
+        return pos + 1;
+    }
 };

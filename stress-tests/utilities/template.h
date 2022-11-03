@@ -1,9 +1,16 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define rep(i, from, to) for (int i = from; i < (to); ++i)
-#define all(x) x.begin(), x.end()
+//#define int long long
+//#define double long double
 #define sz(x) (int)(x).size()
+#define all(x) (x).begin(), (x).end()
+#define rep(i, l, r) for (int i = (int)(l); i <= (int)(r); i++)
+#define per(i, r, l) for (int i = (int)(r); i >= (int)(l); i--)
+
 typedef long long ll;
-typedef pair<int, int> pii;
-typedef vector<int> vi;
+typedef pair <int, int> pii;
+typedef pair <ll, ll> pll;
+
+template <typename T> bool minimize(T &a, const T &b) { return a > b ? a = b, true : false; }
+template <typename T> bool maximize(T &a, const T &b) { return a < b ? a = b, true : false; }

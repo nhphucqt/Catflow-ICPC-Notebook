@@ -39,8 +39,14 @@ build:
 test:
 	./doc/scripts/run-all.sh .
 
+test-one:
+	./doc/scripts/run.sh . "$(name)"
+
 test-compiles:
 	./doc/scripts/compile-all.sh .
+
+test-compiles-one:
+	./doc/scripts/compile.sh . "$(name)"
 
 test-session.pdf: content/test-session/test-session.tex content/test-session/chapter.tex | build
 	$(LATEXCMD) content/test-session/test-session.tex

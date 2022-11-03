@@ -5,21 +5,32 @@
 int main() {
 	rep(it,0,100000) {
 		int N = rand() % 10;
-		FT fw(N);
-		vi t(N);
-		rep(i,0,N) {
+		FenwickTree<ll> fw(N);
+		vector<int> t(N+1);
+		rep(i,1,N) {
 			int v = rand() % 3;
 			fw.update(i, v);
 			t[i] += v;
 		}
 		int q = rand() % 20;
 		int ind = fw.lower_bound(q);
-		int res = -1, sum = 0;
-		rep(i,0,N+1) {
-			if (sum < q) res = i;
-			if (i != N) sum += t[i];
+		int res = N+1, sum = 0;
+		rep(i,1,N+1) {
+			if (i != N+1) sum += t[i];
+			if (sum >= q) {
+				res = i;
+				break;
+			}
 		}
-		assert(res == ind);
+		if (res != ind) {
+			cerr << N << '\n';
+			for (int i = 1; i <= N; ++i) {
+				cerr << t[i] << ' ';
+			} cerr << '\n';
+			cerr << q << '\n';
+			cerr << ' ' << res << ' ' << ind << '\n';
+			assert(res == ind);
+		}
 	}
 	cout<<"Tests passed!"<<endl;
 }

@@ -12,25 +12,33 @@
 
 #include "FenwickTree.h"
 
-struct FT2 {
-	vector<vi> ys; vector<FT> ft;
-	FT2(int limx) : ys(limx) {}
-	void fakeUpdate(int x, int y) {
-		for (; x < sz(ys); x |= x + 1) ys[x].push_back(y);
-	}
-	void init() {
-		for (vi& v : ys) sort(all(v)), ft.emplace_back(sz(v));
-	}
-	int ind(int x, int y) {
-		return (int)(lower_bound(all(ys[x]), y) - ys[x].begin()); }
-	void update(int x, int y, ll dif) {
-		for (; x < sz(ys); x |= x + 1)
-			ft[x].update(ind(x, y), dif);
-	}
-	ll query(int x, int y) {
-		ll sum = 0;
-		for (; x; x &= x - 1)
-			sum += ft[x-1].query(ind(x-1, y));
-		return sum;
-	}
+template <typename T>
+struct FenwickTree2D {
+    int n;
+    vector <vector <int> > node;
+    vector <FenwickTree <T> > tree;
+    FenwickTree2D(int n) : n(n), node(n + 1) {}
+    void fakeUpdate(int x, int y) {
+        for ( ; x <= n; x += x & -x) node[x].push_back(y);
+    }
+    void fakeQuery(int x, int y) {
+        for ( ; x > 0; x -= x & -x) node[x].push_back(y);
+    }
+    void init() {
+        tree.push_back(-1);
+        rep (x, 1, n) {
+            sort(node[x].begin(), node[x].end());
+            node[x].resize(unique(all(node[x])) - node[x].begin());
+            tree.push_back(sz(node[x]) + 1);
+        }
+    }
+    int idx(int x, int y) { return upper_bound(all(node[x]), y) - node[x].begin(); }
+    void update(int x, int y, T dif) {
+        for ( ; x <= n; x += x & -x) tree[x].update(idx(x, y), dif);
+    }
+    T query(int x, int y) {
+        T res = 0;
+        for ( ; x > 0; x -= x & -x) res += tree[x].query(idx(x, y));
+        return res;
+    }
 };
