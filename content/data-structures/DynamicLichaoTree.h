@@ -1,22 +1,28 @@
+/**
+ * Author: hieplpvip
+ * Date: 2020-10-17
+ * License: CC0
+ * Source: own work
+ * Description: Container where you can add segment of the form ax+b, and query maximum/minimum values at points x.
+ *  Useful for dynamic programming (``convex hull trick'').
+ * Time: O(\log N)
+ * Status: stress-tested
+ */
+#pragma once
+
 template <typename T, T minX, T maxX, T defVal, bool maximum>
 struct DynamicLiChaoTree {
     struct Line {
         T a, b;
-
         Line(T a = 0, T b = maximum ? defVal : -defVal) : a(a), b(b) {}
-
         T f(T x) { return a * x + b; }
     };
-
     struct Node {
         Line ln;
         Node *lc, *rc;
-
         Node(Line ln = Line()) : ln(ln), lc(nullptr), rc(nullptr) {}
     } *root;
-
     DynamicLiChaoTree() { root = new Node(); }  
-
     void update(Node *cur, T u, T v, T l, T r, Line nw) {
         #define newNode(x) if (!x) x = new Node()
         if (r < u || v < l) return;
@@ -40,12 +46,10 @@ struct DynamicLiChaoTree {
         }
         #undef newNode
     }
-
     void insert(T a, T b, T l = minX, T r = maxX) {
         if (!maximum) a = -a, b = -b;
         update(root, minX, maxX, l, r, Line(a, b));
     }
-
     T query(T x) {
         Node *cur = root;
         T res = cur->ln.f(x), u = minX, v = maxX;

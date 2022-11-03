@@ -12,29 +12,30 @@
  */
 #pragma once
 
-template<class T, int N> struct Matrix {
-	typedef Matrix M;
-	array<array<T, N>, N> d{};
-	M operator*(const M& m) const {
-		M a;
-		rep(i,0,N) rep(j,0,N)
-			rep(k,0,N) a.d[i][j] += d[i][k]*m.d[k][j];
-		return a;
-	}
-	vector<T> operator*(const vector<T>& vec) const {
-		vector<T> ret(N);
-		rep(i,0,N) rep(j,0,N) ret[i] += d[i][j] * vec[j];
-		return ret;
-	}
-	M operator^(ll p) const {
-		assert(p >= 0);
-		M a, b(*this);
-		rep(i,0,N) a.d[i][i] = 1;
-		while (p) {
-			if (p&1) a = a*b;
-			b = b*b;
-			p >>= 1;
-		}
-		return a;
-	}
+struct Matrix {
+    int n, m;
+    int a[101][101];
+    Matrix(int n, int m) : n(n), m(m) {
+        rep (i, 1, n) rep (j, 1, m) a[i][j] = 0;
+    }
+    Matrix() {}
+    static Matrix identity(int n) {
+        Matrix res(n, n);
+        rep (i, 1, n) res.a[i][i] = 1;
+        return res;
+    }
+    Matrix operator * (const Matrix &oth) const {
+        assert(m == oth.n);
+        Matrix res(n, oth.m);
+        rep (i, 1, n) rep (j, 1, oth.m) rep (k, 1, m)
+            (res.a[i][j] += a[i][k] * (ll)oth.a[k][j] % mod) %= mod;
+        return res;
+    }
+    Matrix &operator *= (const Matrix &oth) { return *this = *this * oth; }
+    Matrix pow(ll exp) {
+        assert(n == m);
+        Matrix base = *this, res = identity(n);
+        for ( ; exp; exp >>= 1, base *= base) if (exp & 1) res *= base;
+        return res;
+    }
 };
