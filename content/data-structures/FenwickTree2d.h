@@ -41,4 +41,5 @@ struct FenwickTree2D {
         for ( ; x > 0; x -= x & -x) res += tree[x].query(idx(x, y));
         return res;
     }
+	/// lmao
 };
