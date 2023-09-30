@@ -148,10 +148,10 @@ def processwithcomments(caption, instream, outstream, listingslang):
 
     if listingslang in ['C++', 'Java']:
         hash_script = 'hash'
-        p = subprocess.Popen(['sh', 'content/contest/%s.sh' % hash_script], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        hsh, _ = p.communicate(nsource)
-        hsh = hsh.split(None, 1)[0]
-        hsh = hsh + ', '
+        # p = subprocess.Popen(['sh', 'content/contest/%s.sh' % hash_script], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        # hsh, _ = p.communicate(nsource)
+        # hsh = hsh.split(None, 1)[0]
+        # hsh = hsh + ', '
     else:
         hsh = ''
     # Produce output
@@ -172,8 +172,8 @@ def processwithcomments(caption, instream, outstream, listingslang):
             out.append(r"\defmemory{%s}" % ordoescape(commands["Memory"]))
         if includelist:
             out.append(r"\leftcaption{%s}" % pathescape(", ".join(includelist)))
-        if nsource:
-            out.append(r"\rightcaption{%s%d lines}" % (hsh, len(nsource.split("\n"))))
+        # if nsource:
+            # out.append(r"\rightcaption{%s%d lines}" % (hsh, len(nsource.split("\n"))))
         langstr = ", language="+listingslang
         out.append(r"\begin{lstlisting}[caption={%s}%s]" % (pathescape(caption), langstr))
         out.append(nsource)
@@ -293,4 +293,5 @@ def main():
         return 2
 
 if __name__ == "__main__":
-    exit(main())
+    # exit(main())
+    main()
